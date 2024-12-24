@@ -1,0 +1,16 @@
+[package]
+name = "iced-twitch-gui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures = "0.3.31"
+home = "0.5.11"
+iced = { version = "0.13.1", features = ["advanced", "image", "tokio"] }
+iced_aw = "0.11.0"
+reqwest = { version = "0.12.9", default-features = false, features = ["json", "rustls-tls", "blocking"] }
+tokio = { version = "1.42.0", features = ["full"] }
+twitch_api = { version = "0.7.0-rc.8", features = ["helix", "client", "reqwest", "serde_json", "twitch_oauth2"] }
+ureq = "2.12.1"
+url = "2.5.4"
+webbrowser = "1.0.3"

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Authorization</title>
+<meta name="ROBOTS" content="NOFOLLOW">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript">
+function initiate() {
+    var hash = document.location.hash.substr(1);
+    document.getElementById("javascript").className = "";
+    if (hash != null) {
+            document.location.replace("/token?"+hash);
+    }
+    else {
+        document.getElementById("javascript").innerHTML = "Error: Access Token not found";
+    }
+}
+</script>
+<style type="text/css">
+    body { text-align: center; background-color: #FFF; max-width: 500px; margin: auto; }
+    noscript { color: red;  }
+    .hide { display: none; }
+</style>
+</head>
+<body onload="initiate()">
+<h1>Authorization</h1>
+<noscript>
+    <p>This page requires <strong>JavaScript</strong> to get your token.
+</noscript>
+<p id="javascript" class="hide">
+You should be redirected..
+</p>
+</body>
+</html>

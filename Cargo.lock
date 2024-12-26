@@ -827,6 +827,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "data-encoding"
+version = "2.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8566979429cf69b49a5c740c60791108e86440e8be149bbea4fe54d2c32d6e2"
+
+[[package]]
 name = "dconf_rs"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1643,14 +1649,16 @@ dependencies = [
 
 [[package]]
 name = "iced-twitch-gui"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "futures",
  "home",
  "iced",
  "iced_aw",
  "reqwest",
+ "serde-cmd",
  "tokio",
+ "tungstenite",
  "twitch_api",
  "url",
  "webbrowser",
@@ -3422,6 +3430,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde-cmd"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a028d1e0d8ef44f5e726821adf48b1c62ddf0c2c0332cd527b79e1626d1cc865"
+
+[[package]]
 name = "serde_derive"
 version = "1.0.215"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4016,6 +4030,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2df906b07856748fa3f6e0ad0cbaa047052d4a7dd609e231c4f72cee8c36f31"
 
 [[package]]
+name = "tungstenite"
+version = "0.26.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "413083a99c579593656008130e29255e54dcaae495be556cc26888f211648c24"
+dependencies = [
+ "byteorder",
+ "bytes",
+ "data-encoding",
+ "http",
+ "httparse",
+ "log",
+ "rand",
+ "rustls",
+ "sha1",
+ "thiserror 2.0.8",
+ "utf-8",
+]
+
+[[package]]
 name = "twitch_api"
 version = "0.7.0-rc.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4166,6 +4199,12 @@ dependencies = [
  "idna",
  "percent-encoding",
 ]
+
+[[package]]
+name = "utf-8"
+version = "0.7.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09cc8ee72d2a9becf2f2febe0205bbed8fc6615b7cb429ad062dc7b7ddd036a9"
 
 [[package]]
 name = "utf16_iter"

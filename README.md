@@ -1,6 +1,6 @@
 Twitch GUI using iced and written in rust.  Shows currently live streams from twitch creators you follow.
 
-Works wity any program to do the actual streaming.  Defaults to assuming an already set up twitch-hls-client.
+Works with any program to do the actual streaming.  Defaults to assuming an already set up twitch-hls-client.
 
 Icon found on vecteezy.com
 

@@ -1,4 +1,5 @@
 use futures::TryStreamExt;
+use iced::time::{self, Duration, Instant};
 use home::home_dir;
 use iced::alignment::Vertical::Top;
 use iced::event::{self, Event};
@@ -30,6 +31,7 @@ struct IcedTwitchGui {
     player_command_input: String,
     twitch_oauth_token_input: String,
     cache_path: std::path::PathBuf,
+    currently_streaming_broadcasters: Vec<String>
 }
 
 #[derive(Clone, Debug)]
@@ -48,6 +50,8 @@ enum Message {
     PlayerCommandTextInputChanged(String),
     StreamCommandTextInputChanged(String),
     OAuthTokenTextInputChanged(String),
+    OneMinute(Instant),
+    CheckAndNotifyNewStreams(Vec<Stream>)
 }
 async fn get_followed_streams(
     client: HelixClient<'static, reqwest::Client>,
@@ -134,13 +138,38 @@ impl IcedTwitchGui {
             player_command_input: player_command.clone(),
             twitch_oauth_token_input: oauth_token.clone(),
             cache_path: home_dir().unwrap().join(".cache").join("iced_twitch_gui"),
+            currently_streaming_broadcasters: Vec::new()
         }
     }
     fn subscription(&self) -> Subscription<Message> {
-        event::listen().map(Message::EventOccurred)
+        Subscription::batch(vec![
+        event::listen().map(Message::EventOccurred),
+            time::every(Duration::from_secs(60)).map(Message::OneMinute)
+        ])
     }
     fn update(&mut self, message: Message) -> Task<Message> {
         match message {
+            Message::CheckAndNotifyNewStreams(streams) => {
+                let mut new_broadcasters: Vec<String> = Vec::new();
+                let mut new_current_broadcasters: Vec<String> = Vec::new();
+                for stream in streams {
+                    let this_broadcaster = stream.user_login.to_string();
+                    if !self.currently_streaming_broadcasters.contains(&this_broadcaster) {
+                        new_broadcasters.push(this_broadcaster.clone());
+                    }
+                    new_current_broadcasters.push(this_broadcaster.clone());
+                }
+                self.currently_streaming_broadcasters = new_current_broadcasters.clone();
+                if new_broadcasters.len() > 0 {
+                    let notif_message = format!("The following streamers have started streaming: {}", new_broadcasters.join(", "));
+                    notify_rust::Notification::new().summary("Iced Twitch GUI").body(notif_message.as_str()).show().unwrap();
+                }
+                Task::none()
+
+            }
+            Message::OneMinute(_instant) => {
+                Task::perform(get_followed_streams(self.client.clone(), self.token.clone().unwrap()), Message::CheckAndNotifyNewStreams)
+            }
             Message::StreamCommandTextInputChanged(new_si) => {
                 self.stream_command_input = new_si.clone();
                 Task::none()
@@ -251,6 +280,7 @@ impl IcedTwitchGui {
             Message::SaveRefresh((followed_streams, handle_vec)) => {
                 self.followed_streams = followed_streams.clone();
                 self.image_handles = handle_vec.clone();
+                self.currently_streaming_broadcasters = self.followed_streams.clone().iter().map(|x| x.user_login.to_string()).collect();
                 Task::none()
             }
         }

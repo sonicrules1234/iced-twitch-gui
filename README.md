@@ -2,6 +2,8 @@ Twitch GUI using iced and written in rust.  Shows currently live streams from tw
 
 Works with any program to do the actual streaming.  Defaults to assuming an already set up twitch-hls-client.
 
+Also provides notifications for when streamers go online.
+
 Icon found on vecteezy.com
 
 [Instructions on how to get the oauth token if wanted](https://streamlink.github.io/cli/plugins/twitch.html#authentication)
